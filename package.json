@@ -1,0 +1,33 @@
+{
+  "name": "okabe",
+  "version": "0.0.1",
+  "description": "A CoffeeScript data structure and algorithm library",
+  "homepage": "https://github.com/Kaixhin/okabe",
+  "author": "Kaixhin <design@kaixhin.com>",
+  "keywords": [
+    "data structure",
+    "algorithm"
+  ],
+  "main": "lib",
+  "scripts": {
+    "prepublish": "coffee --bare --compile --output lib src",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "dependencies": {
+    "lodash": "~2.4.1"
+  },
+  "devDependencies": {
+    "coffee-script": "~1.7.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Kaixhin/okabe"
+  },
+  "bugs": {
+    "url": "https://github.com/Kaixhin/okabe/issues"
+  },
+  "license": "MIT"
+}
