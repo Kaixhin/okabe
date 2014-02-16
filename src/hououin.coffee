@@ -1,5 +1,3 @@
-_ = require "lodash"
-
 # Linear data structures
 
 class Stack
@@ -242,7 +240,10 @@ class Map
   delete: (key) ->
     delete @_obj[key]
   size: ->
-    _.size @_obj
+    count = 0
+    for own key of @_obj
+      count++
+    count
   exists: (key) ->
     key in @_obj
 

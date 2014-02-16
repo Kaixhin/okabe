@@ -1,4 +1,3 @@
-_ = require "lodash"
 H = require "./hououin"
 
 class Search
