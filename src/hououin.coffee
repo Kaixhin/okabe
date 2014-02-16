@@ -1,5 +1,7 @@
 _ = require "lodash"
 
+# Linear data structures
+
 class Stack
   constructor: ->
     @_arr = []
@@ -41,7 +43,6 @@ class Dequeue
     @_arr.length is 0
   size: ->
     @_arr.length
-
 
 class ListItem
   constructor: (@data) ->
@@ -229,10 +230,55 @@ class OrderedList
       previous.setNext current.getNext()
     current.getData()
 
+# Map
+
+class Map
+  constructor: ->
+    @_obj = {}
+  put: (key, item) ->
+    @_obj[key] = item
+  get: (key) ->
+    if key in @_obj then @_obj[key] else null
+  delete: (key) ->
+    delete @_obj[key]
+  size: ->
+    _.size @_obj
+  exists: (key) ->
+    key in @_obj
+
+# Branching data structures
+
+class BinaryTree
+  constructor: (@key) ->
+    @leftChild = null
+    @rightChild = null
+  getLeftChild: ->
+    @leftChild
+  getRightChild: ->
+    @rightChild
+  setRootVal: (val) ->
+    @key = val
+  getRootVal: ->
+    @key
+  insertLeft: (val) ->
+    if @leftChild is null
+      @leftChild = new BinaryTree val
+    else
+      t = new BinaryTree val
+      t.leftChild = @leftChild
+      @leftChild = t
+  insertRight: (val) ->
+    if @rightChild is null
+      @rightChild = new BinaryTree val
+    else
+      t = new BinaryTree val
+      t.rightChild = @rightChild
+      @rightChild = t
+
+class Graph
+
+
+
 class Set
   # union, intersection, difference, issubset, add, remove, pop, clear
   constructor: ->
-
-class Tree
-
-class Graph

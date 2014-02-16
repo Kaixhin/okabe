@@ -12,11 +12,24 @@ Data structures are ways of representing data for dealing with computational pro
 - Stack
 - Queue
 - Dequeue
-- List
-- Set
-- Tree
-- Graph
+- Unordered List
+- Ordered List
+- Map
+- Binary Tree
 
 Kyouma (凶真)
 -------------
 Algorithms are lists of instructions for solving computational problems.
+
+- Sequential Search
+- Binary Search
+- Bubble Sort
+- Short Bubble Sort
+- Selection Sort
+- Insertion Sort
+- Shell Sort
+- Merge Sort
+- Quick Sort
+- Pre-order Traversal
+- Post-order Traversal
+- In-order Traversal
