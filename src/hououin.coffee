@@ -276,6 +276,203 @@ class BinaryTree
       t.rightChild = @rightChild
       @rightChild = t
 
+class BinaryHeap
+  constructor: ->
+    @_list = [0]
+    @size = 0
+  _percolateUp: (i) ->
+    while Math.floor(i / 2) > 0
+      if @_list[i] < @_list[Math.floor(i / 2)]
+        temp = @_list[Math.floor(i / 2)]
+        @_list[Math.floor(i / 2)] = @_list[i]
+        @_list[i] = temp
+      i = Math.floor(i / 2)
+  insert: (k) ->
+    @_list.append k
+    @size++
+    @_percolateUp @size
+  findMin: ->
+    @_list[0]
+  @_minChild = (i) ->
+    if i * 2 + 1 > @size
+      i * 2
+    else
+      if @_list[i * 2] < @_list[i * 2 + 1]
+        i * 2
+      else
+        i * 2 + 1
+  @_percolateDown: (i) ->
+    while i * 2 <= @_size
+      mc = @_minChild i
+      if @_list[i] > @_list[mc]
+        temp = @_list[i]
+        @_list[i] = @_list[mc]
+        @_list[mc] = temp
+      i = mc
+  deleteMin: ->
+    returnVal = @_list[1]
+    @_list[1] = @_list[@_size]
+    @size--
+    @_list.pop()
+    @_percolateDown i
+    returnVal
+  isEmpty: ->
+    @size is 0
+  buildHeap: (list) ->
+    i = Math.floor(list.length / 2)
+    @size = list.length
+    @_list = [0].concat list
+    while i > 0
+      @_percolateDown i
+      i--
+
+class BinaryNode
+  constructor: (@key, @val, @leftChild=null, @rightChild=null, @parent=null) ->
+  hasLeftChild: ->
+    @leftChild
+  hasRightChild: ->
+    @rightChild
+  isLeftChild: ->
+    @parent?.leftChild is @
+  isRightChild: ->
+    @parent?.rightChild is @
+  isRoot: ->
+    !@parent?
+  isLeaf: ->
+    !(@leftChild or @ @rightChild)
+  hasAnyChildren: ->
+    @leftChild or @rightChild
+  hasBothChildren: ->
+    @leftChild and @rightChild
+  replaceNodeData: (key, val, lc, rc) ->
+    @key = key
+    @val = val
+    @leftChild = lc
+    @rightChild = rc
+    if @hasLeftChild()
+      @leftChild.parent = @
+    if @hasRightChild()
+      @rightChild.parent = @
+
+class BinarySearchTree
+  constructor: ->
+    @_root = null
+    @size = 0
+  length: ->
+    @size
+  # Cannot deal with duplicates
+  _put: (key, val, currentNode) ->
+    if key < currentNode.key
+      if currentNode.hasLeftChild()
+        @_put key, val, currentNode.leftChild
+      else
+        currentNode.leftChild = new BinaryNode key, val, null, null, currentNode
+    else
+      if currentNode.hasRightChild()
+        @_put key, val, currentNode.rightChild
+      else
+        currentNode.rightChild = new BinaryNode key, val, null, null, currentNode
+  put: (key, val) ->
+    if @root
+      @_put key, val, @root
+    else
+      @root = new BinaryNode key, val
+    @size++
+  _get: (key, currentNode) ->
+    unless currentNode
+      null
+    else if currentNode.key is key
+      currentNode
+    else if key < currentNode.key
+      @_get key, currentNode.leftChild
+    else
+      @_get key, currentNode.rightChild
+  get: (key) ->
+    if @root
+      result = @_get key, @root
+      if result then @result.val else null
+    else
+      null
+  delete: (key) ->
+    if @size > 1
+      nodeToRemove = @_get key, @root
+      if nodeToRemove
+        @remove nodeToRemove
+        @size--
+      else
+        throw new Error "Key not in tree"
+    else if @size is 1 and @root.key is key
+      @root = null
+      @size--
+    else
+      throw new Error "Key not in tree"
+  spliceOut: ->
+    if @isLeaf()
+      if @isLeftChild()
+        @parent.leftChild = null
+      else
+        @parent.rightChild = null
+    else if @hasAnyChildren()
+      if @hasLeftChild()
+        if @isLeftChild()
+          @parent.leftChild = @leftChild
+        else
+          @parent.rightChild = @leftChild
+        @leftChild.parent = @parent
+      else
+        if @isLeftChild()
+          @parent.leftChild = @rightChild
+        else
+          @parent.rightChild = @rightChild
+        @rightChild.parent = @parent
+  findSuccessor: ->
+    succ = null
+    if @hasRightChild()
+      succ = @rightChild.findMin()
+    else
+      if @parent
+        if @isLeftChild()
+          succ = @parent
+        else
+          @parent.rightChild = null
+          succ = @parent.findSuccessor()
+    succ
+  findMin: ->
+    current = @
+    while current.hasLeftChild()
+      current = current.leftChild
+    current
+  remove: (currentNode) ->
+    if currentNode.isLeaf()
+      if currentNode is currentNode.parent.leftChild
+        currentNode.parent.leftChild = null
+      else
+        currentNode.parent.rightChild = null
+    else if currentNode.hasBothChildren()
+      succ = currentNode.findSuccessor()
+      succ.spliceOut()
+      currentNode.key = succ.key
+      currentNode.val = succ.val
+    else
+      if currentNode.hasLeftChild()
+        if currentNode.isLeftChild()
+          currentNode.leftChild.parent = currentNode.parent
+          currentNode.parent.leftChild = currentNode.leftChild
+        else if currentNode.isRightChild()
+          currentNode.leftChild.parent = currentNode.parent
+          currentNode.parent.rightChild = currentNode.leftChild
+        else
+          currentNode.replaceNodeData currentNode.leftChild.key, currentNode.leftChild.val, currentNode.leftChild.leftChild, currentNode.leftChild.rightChild
+      else
+        if currentNode.isLeftChild()
+          currentNode.rightChild.parent = currentNode.parent
+          currentNode.parent.leftChild = currentNode.rightChild
+        else if currentNode.isRightChild()
+          currentNode.rightChild.parent = currentNode.parent
+          currentNode.parent.rightChild = currentNode.rightChild
+        else
+          currentNode.replaceNodeData currentNode.rightChild.key, currentNode.rightChild.val, currentNode.rightChild.leftChild, currentNode.rightChild.rightChild
+
 class Graph
 
 

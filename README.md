@@ -16,6 +16,8 @@ Data structures are ways of representing data for dealing with computational pro
 - Ordered List
 - Map
 - Binary Tree
+- Binary Heap
+- Binary Search Tree
 
 Kyouma (凶真)
 -------------
