@@ -473,6 +473,76 @@ class BinarySearchTree
         else
           currentNode.replaceNodeData currentNode.rightChild.key, currentNode.rightChild.val, currentNode.rightChild.leftChild, currentNode.rightChild.rightChild
 
+class AVLTree extends BinarySearchTree
+  _put: (key, val, currentNode) ->
+    if key < currentNode.key
+      if currentNode.hasLeftChild()
+        @_put key, val, currentNode.leftChild
+      else
+        currentNode.leftChild = new BinaryNode key, val, null, null, currentNode
+        @updateBalanace currentNode.leftChild
+    else
+      if currentNode.hasRightChild()
+        @_put key, val, currentNode.rightChild
+      else
+        currentNode.rightChild = new BinaryNode key, val, null, null, currentNode
+        @updateBalance currentNode.rightChild
+  updateBalance: (node) ->
+    if node.balanceFactor > 1 or node.balanceFactor < -1
+      @rebalance node
+      return
+    if node.parent isnt null
+      if node.isLeftChild()
+        node.parent.balanceFactor += 1
+      else if node.isRightChild()
+        node.parent.balanceFactor -= 1
+      if node.parent.balanceFactor != 0
+        @updateBalance node.parent
+  rotateLeft: (rotRoot) ->
+    newRoot = rotRoot.rightChild
+    rotRoot.rightChild = newRoot.leftChild
+    unless newRoot.leftChild is null
+      newRoot.leftChild.parent = rotRoot
+    newRoot.parent = rotRoot.parent
+    if rotRoot.isRoot()
+      @root = newRoot
+    else
+      if rotRoot.isLeftChild()
+        rotRoot.parent.leftChild = newRoot
+      else
+        rotRoot.parent.rightChild = newRoot
+    newRoot.leftChild = rotRoot
+    rotRoot.parent = newRoot
+    rotRoot.balanceFactor += 1 - Math.min newRoot.balanceFactor, 0
+    newRoot.balanceFactor += 1 + Math.max rotRoot.balanceFactor, 0
+  rotateRight: (rotRoot) ->
+    newRoot = rotRoot.leftChild
+    rotRoot.leftChild = newRoot.rightChild
+    unless newRoot.rightChild is null
+      newRoot.rightChild.parent = rotRoot
+    newRoot.parent = rotRoot.parent
+    if rotRoot.isRoot()
+      @root = newRoot
+    else
+      if rotRoot.isRightChild()
+        rotRoot.parent.rightChild = newRoot
+      else
+        rotRoot.parent.leftChild = newRoot
+    newRoot.rightChild = rotRoot
+    rotRoot.parent = newRoot
+    rotRoot.balanceFactor += 1 - Math.min newRoot.balanceFactor, 0
+    newRoot.balanceFactor += 1 + Math.max rotRoot.balanceFactor, 0
+  rebalance: (node) ->
+    if node.balanceFactor < 0
+      if node.rightChild.balanceFactor > 0
+        @rotateRight node.rightChild
+      @rotateLeft node
+    else if node.balanceFactor > 0
+      if node.leftChild.balanceFactor < 0
+        @rotateLeft node.leftChild
+      @rotateRight node
+  # TODO deletion
+
 class Graph
 
 
