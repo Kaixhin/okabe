@@ -326,6 +326,9 @@ class BinaryHeap
       @_percolateDown i
       i--
 
+# TODO Make Priority Queue accept a key and value object
+PriorityQueue = BinaryHeap
+
 class BinaryNode
   constructor: (@key, @val, @leftChild=null, @rightChild=null, @parent=null) ->
   hasLeftChild: ->
@@ -542,6 +545,8 @@ class AVLTree extends BinarySearchTree
         @rotateLeft node.leftChild
       @rotateRight node
   # TODO deletion
+
+BalancedBinarySearchTree = AVLTree
 
 class Vertex
   constructor: (@id) ->

@@ -17,6 +17,7 @@ Data structures are ways of representing data for dealing with computational pro
 - Map
 - Binary Tree
 - Binary Heap
+- Priority Queue
 - Binary Search Tree
 - AVL Tree / Balanced Binary Search Tree
 - Graph
@@ -26,7 +27,9 @@ Kyouma (凶真)
 Algorithms are lists of instructions for solving computational problems.
 
 - Sequential Search
+- Ordered Sequential Search
 - Binary Search
+- Breadth First Search
 - Bubble Sort
 - Short Bubble Sort
 - Selection Sort

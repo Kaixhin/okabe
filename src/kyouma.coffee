@@ -178,3 +178,5 @@ class Traversal
       Traversal.Preorder tree.getLeftChild()
       console.log tree.getRootVal()
       Traversal.Preorder tree.getRightChild()
+
+# TODO Implement Dijkstra (shortest path) and Prim (minimum spanning tree)
