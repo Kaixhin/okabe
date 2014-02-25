@@ -20,7 +20,7 @@ class Queue
   enqueue: (item) ->
     @_arr.unshift item
   dequeue: ->
-    @_arr.shift()
+    @_arr.pop()
   isEmpty: ->
     @_arr.length is 0
   size: ->
@@ -282,11 +282,11 @@ class BinaryHeap
     @size = 0
   _percolateUp: (i) ->
     while Math.floor(i / 2) > 0
-      if @_list[i] < @_list[Math.floor(i / 2)]
-        temp = @_list[Math.floor(i / 2)]
-        @_list[Math.floor(i / 2)] = @_list[i]
+      if @_list[i] < @_list[i // 2]
+        temp = @_list[i // 2]
+        @_list[i // 2] = @_list[i]
         @_list[i] = temp
-      i = Math.floor(i / 2)
+      i = i // 2
   insert: (k) ->
     @_list.append k
     @size++
@@ -319,7 +319,7 @@ class BinaryHeap
   isEmpty: ->
     @size is 0
   buildHeap: (list) ->
-    i = Math.floor(list.length / 2)
+    i = list.length // 2
     @size = list.length
     @_list = [0].concat list
     while i > 0
@@ -543,10 +543,77 @@ class AVLTree extends BinarySearchTree
       @rotateRight node
   # TODO deletion
 
+class Vertex
+  constructor: (@id) ->
+    @connectedTo = {}
+  addNeighbour: (nbr, weight=0) ->
+    @connectedTo[nbr.id] = weight
+  toString: ->
+    "#{@id} connectedTo: #{(id for id of @connectedTo)}"
+  getConnections: ->
+    (id for id of @connectedTo)
+  getID: ->
+    @id
+  getWeight: (nbr) ->
+    @connectedTo[nbr.id]
+  # Search
+  getDistance: ->
+    @distance
+  setDistance: (dist) ->
+    @distance = dist
+  getPred: ->
+    @predecessor
+  setPred: (pred) ->
+    @predecessor = pred
+  getColor: ->
+    @color
+  setColor: (color) ->
+    @color = color
+  # Depth first search
+  getDiscovery: ->
+    @discovery
+  setDiscovery: (discovery) ->
+    @discovery = discovery
+  getFinish: ->
+    @finish
+  setFinish: (finish) ->
+    @finish = finish
+
 class Graph
-
-
-
-class Set
-  # union, intersection, difference, issubset, add, remove, pop, clear
   constructor: ->
+    @vertList = {}
+    @numVertices = 0
+    # For depth first search
+    @time = 0
+  addVertex: (id) ->
+    @numVertices++
+    newVertex = new Vertex id
+    @vertList[id] = newVertex
+    newVertex
+  getVertex: (vertID) ->
+    if vertID in @vertList then @vertList[vertID] else null
+  addEdge: (fromVert, toVert, weight) ->
+    if fromVert not in @vertList then @addVertex fromVert
+    if toVert not in @vertList then @addVertex toVert
+    @vertList[fromVert].addNeighbour @vertList[toVert], weight
+  getVertices: ->
+    (id for id in @vertList)
+  # For depth first search
+  dfs: ->
+    for id, vert of @vertList
+      vert.setColor "white"
+      vert.setPred -1
+    for id, vert of @vertList
+      if vert.getColor is "white"
+        @dfsvisit vert
+  dfsvisit: (startVert) ->
+    startVert.setColor "gray"
+    @time++
+    startVert.setDiscovery @time
+    for nextVert in startVert.getConnections()
+      if nextVert.getColor is "white"
+        nextVert.setPred startVert
+        @dfsvisit nextVert
+    startVert.setColor "black"
+    @time++
+    startVert.setFinish @time

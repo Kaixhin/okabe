@@ -18,6 +18,8 @@ Data structures are ways of representing data for dealing with computational pro
 - Binary Tree
 - Binary Heap
 - Binary Search Tree
+- AVL Tree / Balanced Binary Search Tree
+- Graph
 
 Kyouma (凶真)
 -------------

@@ -1,6 +1,7 @@
 H = require "./hououin"
 
 class Search
+  # Array
   @Sequential: (list, item) ->
     pos = 0
     found = false
@@ -28,7 +29,7 @@ class Search
     last = list.length - 1
     found = false
     while first <= last and not found
-      midpoint = Math.floor((first + last) / 2)
+      midpoint = (first + last) // 2
       if list[midpoint] is item
         found = true
       else
@@ -37,6 +38,21 @@ class Search
         else
           first = midpoint + 1
     found
+  # Graph
+  @BreadthFirst: (graph, start) ->
+    start.setDistance 0
+    start.setPred null
+    vertQueue = new Queue
+    vertQueue.enqueue start
+    until vertQueue.isEmpty()
+      currentVert = vertQueue.dequeue()
+      for nbr in currentVert.getConnections()
+        if nbr.getColor() is "white"
+          nbr.setColor "gray"
+          nbr.setDistance(currentVert.getDistance() + 1)
+          nbr.setPred currentVert
+          vertQueue.enqueue nbr
+      currentVert.setColor "black"
 
 class Sort
   @Bubble: (list) ->
@@ -85,11 +101,11 @@ class Sort
           pos -= gap
         list[pos] = currentVal
 
-    sublistCount = Math.floor(list.length / 2)
+    sublistCount = list.length // 2
     while sublistCount > 0
       for startPos in [0..sublistCount]
         gapInsertionSort list, startPos, sublistCount
-      sublistCount = Math.floor(sublistCount / 2)
+      sublistCount = sublistCount // 2
   @Merge: (list) ->
     if list.length > 1
       mid = Math.ceil(list.length / 2)
